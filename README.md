@@ -9,6 +9,7 @@ npm install attenuationbyatmosphericgases
 ## Usage
 ```
 var GetAirAttenuation = require('attenuationbyatmosphericgases').GetAirAttenuation;
+var GetWaterAttenuation = require('attenuationbyatmosphericgases').GetWaterAttenuation;
 let freq = 60; // 60 GHz
 let temperature = 20; // 20 degree
 let pressure = 1000; // hpa
