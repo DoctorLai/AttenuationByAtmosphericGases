@@ -88,7 +88,29 @@ const GetAirAttenuation = (frequency, temperature, pressure) => {
     return airAttenuationLessThan350Ghz(temperature, frequency, pressure);
 }
 
-module.exports = {
-    GetAirAttenuation
+const GetWaterAttenuation = (frequency, temperature, pressure, density) => {
+    const f = frequency;
+    const rp = pressure / 1013;
+    const rt = 288 / (273 + temperature);    
+    const eta1 = 0.955 * rp * Math.pow(rt, 0.68) + 0.006 * density;
+    const eta2 = 0.735 * rp * Math.pow(rt, 0.5) + 0.0353 * Math.pow(rt, 4) * density;
+    let g = (f, fi) => {
+        return 1 + Math.pow((f - fi) / (f + fi), 2);
+    }
+    return (
+        3.98 * eta1 * Math.exp(2.23 * (1 - rt)) / (Math.pow(f - 22.235, 2) + 9.42 * Math.pow(eta1, 2)) * g(f, 22) + 
+        11.96 * eta1 * Math.exp(0.7 * (1 - rt)) / (Math.pow(f - 183.32, 2) + 11.14 * Math.pow(eta1, 2)) +
+        0.081 * eta1 * Math.exp(6.44 * (1 - rt)) / (Math.pow(f - 321.226, 2) + 6.29 * Math.pow(eta1, 2)) + 
+        3.66 * eta1 * Math.exp(1.6 * (1 - rt) / (Math.pow(f - 325.153, 2) + 9.22 * Math.pow(eta1, 2))) + 
+        25.37 * eta1 * Math.exp(1.09 * (1 - rt)) / (Math.pow(f - 380, 2)) + 
+        17.4 * eta1 * Math.exp(1.46 * (1 - rt)) / Math.pow(f - 448, 2) + 
+        844.6 * eta1 * Math.exp(0.17 * (1 - rt)) / Math.pow(f - 557, 2) * g(f, 557) + 
+        290 * eta1 * Math.exp(0.41 * (1 - rt)) / Math.pow(f - 752, 2) * g(f, 752) +
+        8.3328 * 1e4 * eta2 * Math.exp(0.99 * (1 - rt)) / Math.pow(f - 1780, 2) * g(f, 1780)
+    ) * Math.pow(f, 2) * Math.pow(rt, 2.5) * density * 1e-4;
 }
 
+module.exports = {
+    GetAirAttenuation, 
+    GetWaterAttenuation
+}

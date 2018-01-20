@@ -6,7 +6,8 @@
 
 var should = require('chai').should(),
     module = require('../index'),
-    GetAirAttenuation = module.GetAirAttenuation;
+    GetAirAttenuation = module.GetAirAttenuation,
+    GetWaterAttenuation = module.GetWaterAttenuation;
 
 describe('54', function() {
   it('30', function() {
@@ -41,5 +42,11 @@ describe('120', function() {
 describe('350', function() {
   it('200', function() {
     GetAirAttenuation(200, 13, 1000).should.be.closeTo(0.0101, 1e-3);
+  }); 
+});
+
+describe('water', function() {
+  it('water', function() {
+    GetWaterAttenuation(10, 15, 1013, 7.5).should.be.closeTo(0.28112047608612034, 1e-3);
   }); 
 });
